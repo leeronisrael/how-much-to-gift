@@ -151,6 +151,7 @@
                     <option value="engineer">Engineer</option>
                     <option value="artist">Artist</option>
                     <option value="student">Student</option>
+                    <option value="vp-real-estate">VP at Real Estate Investment Company</option>
                     <option value="other">Other</option>
                 </select>
             </div>
@@ -202,6 +203,25 @@
             else if (relationship === 'cousin in-law' && culture === 'persian' && event === 'wedding') {
                 recommendation = 'You\'re a fat boi, nom nom nom <span class="emoji-explosion">🌭🍔🌭🍔🌭🍔🌭🍔🌭🍔</span>';
                 explanation = '';
+            }
+            else if (profession === 'vp-real-estate') {
+                // Calculate the normal amount first
+                let baseAmount = getBaseAmount(event);
+                let multiplier = getRelationshipMultiplier(relationship);
+                let culturalFactor = getCulturalFactor(culture);
+                let closenessAdjustment = getClosenessAdjustment(closeness);
+                let professionFactor = getProfessionFactor(profession);
+                
+                let finalAmount = Math.round(baseAmount * multiplier * culturalFactor * closenessAdjustment * professionFactor);
+                
+                // Jewish chai adjustment
+                if (isJewish) {
+                    finalAmount = Math.round(finalAmount / 18) * 18;
+                    if (finalAmount === 0) finalAmount = 18;
+                }
+                
+                recommendation = `$${finalAmount} but you can give it to them late, hey venmo is ok`;
+                explanation = 'VP life means flexibility on timing and payment methods! 💳';
             }
             else {
                 // Regular calculation
@@ -275,6 +295,7 @@
             switch(profession) {
                 case 'doctor': return 1.4;
                 case 'entrepreneur': return 1.3;
+                case 'vp-real-estate': return 1.5;
                 case 'lawyer': return 1.2;
                 case 'engineer': return 1.1;
                 case 'teacher': return 0.9;
