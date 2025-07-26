@@ -158,6 +158,22 @@
 
             <div class="form-group">
                 <div class="checkbox-group">
+                    <input type="checkbox" id="destination" onchange="toggleDestinationType()">
+                    <label for="destination">Is it a destination wedding?</label>
+                </div>
+            </div>
+
+            <div class="form-group" id="destinationType" style="display: none;">
+                <label for="location">Destination type:</label>
+                <select id="location">
+                    <option value="">Select destination type</option>
+                    <option value="domestic">Domestic</option>
+                    <option value="international">International</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
                     <input type="checkbox" id="jewish">
                     <label for="jewish">Are they Jewish?</label>
                 </div>
@@ -182,6 +198,8 @@
             const culture = document.getElementById('culture').value;
             const relationship = document.getElementById('relationship').value;
             const profession = document.getElementById('profession').value;
+            const isDestination = document.getElementById('destination').checked;
+            const location = document.getElementById('location').value;
             const isJewish = document.getElementById('jewish').checked;
             
             let recommendation = '';
@@ -211,8 +229,9 @@
                 let culturalFactor = getCulturalFactor(culture);
                 let closenessAdjustment = getClosenessAdjustment(closeness);
                 let professionFactor = getProfessionFactor(profession);
+                let destinationFactor = getDestinationFactor(isDestination, location);
                 
-                let finalAmount = Math.round(baseAmount * multiplier * culturalFactor * closenessAdjustment * professionFactor);
+                let finalAmount = Math.round(baseAmount * multiplier * culturalFactor * closenessAdjustment * professionFactor * destinationFactor);
                 
                 // Jewish chai adjustment
                 if (isJewish) {
@@ -230,8 +249,9 @@
                 let culturalFactor = getCulturalFactor(culture);
                 let closenessAdjustment = getClosenessAdjustment(closeness);
                 let professionFactor = getProfessionFactor(profession);
+                let destinationFactor = getDestinationFactor(isDestination, location);
                 
-                let finalAmount = Math.round(baseAmount * multiplier * culturalFactor * closenessAdjustment * professionFactor);
+                let finalAmount = Math.round(baseAmount * multiplier * culturalFactor * closenessAdjustment * professionFactor * destinationFactor);
                 
                 // Jewish chai adjustment
                 if (isJewish) {
@@ -302,6 +322,28 @@
                 case 'artist': return 0.8;
                 case 'student': return 0.6;
                 default: return 1.0;
+            }
+        }
+        
+        function getDestinationFactor(isDestination, location) {
+            if (!isDestination) return 1.0;
+            
+            switch(location) {
+                case 'domestic': return 0.8; // Less gift since you're spending on travel
+                case 'international': return 0.6; // Even less due to higher travel costs
+                default: return 0.8;
+            }
+        }
+        
+        function toggleDestinationType() {
+            const checkbox = document.getElementById('destination');
+            const dropdown = document.getElementById('destinationType');
+            
+            if (checkbox.checked) {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+                document.getElementById('location').value = '';
             }
         }
     </script>
