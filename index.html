@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Much to Gift? 🎁</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        select, input[type="checkbox"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f5e8;
+            border-radius: 5px;
+            border-left: 5px solid #4CAF50;
+            display: none;
+        }
+        .result h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>How Much Should I Gift? 🎁</h1>
+        
+        <form id="giftForm">
+            <div class="form-group">
+                <label for="event">Event:</label>
+                <select id="event" required>
+                    <option value="">Select an event</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="med-school">Medical School Graduation</option>
+                    <option value="residency">Residency Graduation</option>
+                    <option value="oral-maxillofacial">Oral Maxillofacial Surgery Residency Graduation</option>
+                    <option value="other">Other Celebration</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="closeness">How close are you?</label>
+                <select id="closeness" required>
+                    <option value="">Select closeness level</option>
+                    <option value="speech">I gave a speech at their wedding/event</option>
+                    <option value="close">Very close relationship</option>
+                    <option value="moderate">Good relationship, attended ceremony</option>
+                    <option value="distant">Invited but not very close</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="culture">Cultural Background:</label>
+                <select id="culture" required>
+                    <option value="">Select background</option>
+                    <option value="persian">Persian</option>
+                    <option value="white">White</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="relationship">Relationship:</label>
+                <select id="relationship" required>
+                    <option value="">Select relationship</option>
+                    <option value="brother">Brother</option>
+                    <option value="sister">Sister</option>
+                    <option value="cousin">Cousin</option>
+                    <option value="cousin in-law">Cousin in-law</option>
+                    <option value="friend">Close Friend</option>
+                    <option value="acquaintance">Acquaintance</option>
+                    <option value="other-family">Other Family</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="jewish">
+                    <label for="jewish">Are they Jewish? (Gift amounts in multiples of chai/18)</label>
+                </div>
+            </div>
+
+            <button type="submit">Calculate Gift Amount!</button>
+        </form>
+
+        <div id="result" class="result">
+            <h3>Gift Recommendation:</h3>
+            <p id="recommendation"></p>
+            <p id="explanation"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('giftForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const event = document.getElementById('event').value;
+            const closeness = document.getElementById('closeness').value;
+            const culture = document.getElementById('culture').value;
+            const relationship = document.getElementById('relationship').value;
+            const isJewish = document.getElementById('jewish').checked;
+            
+            let recommendation = '';
+            let explanation = '';
+            
+            // Easter Eggs
+            if (event === 'oral-maxillofacial' && relationship === 'brother') {
+                recommendation = 'Beer Making Machine';
+                explanation = 'Your brother survived oral surgery residency. He deserves to make his own beer now! 🍺';
+            }
+            else if (culture === 'white') {
+                recommendation = 'Pickle Ball Racquet Set';
+                explanation = 'It\'s white people law. Everyone gets pickle ball equipment. No exceptions. 🏓';
+            }
+            else if (relationship === 'cousin in-law' && culture === 'persian' && event === 'wedding') {
+                recommendation = 'I\'m a fat boi, nom nom nom 🌭🍔🌭🍔🌭🍔🌭🍔🌭🍔';
+                explanation = 'Persian wedding + cousin in-law = FEAST MODE ACTIVATED! 🎉';
+            }
+            else {
+                // Regular calculation
+                let baseAmount = getBaseAmount(event);
+                let multiplier = getRelationshipMultiplier(relationship);
+                let culturalFactor = getCulturalFactor(culture);
+                let closenessAdjustment = getClosenessAdjustment(closeness);
+                
+                let finalAmount = Math.round(baseAmount * multiplier * culturalFactor * closenessAdjustment);
+                
+                // Jewish chai adjustment
+                if (isJewish) {
+                    finalAmount = Math.round(finalAmount / 18) * 18;
+                    if (finalAmount === 0) finalAmount = 18;
+                }
+                
+                recommendation = `$${finalAmount}`;
+                explanation = `Based on ${event}, ${relationship} relationship, ${culture} background, and ${closeness} closeness level.`;
+                
+                if (isJewish) {
+                    explanation += ' Amount adjusted to multiples of chai (18) for Jewish tradition. 🕯️';
+                }
+            }
+            
+            document.getElementById('recommendation').textContent = recommendation;
+            document.getElementById('explanation').textContent = explanation;
+            document.getElementById('result').style.display = 'block';
+        });
+        
+        function getBaseAmount(event) {
+            switch(event) {
+                case 'wedding': return 250;
+                case 'med-school': return 100;
+                case 'residency': return 150;
+                case 'oral-maxillofacial': return 200;
+                default: return 75;
+            }
+        }
+        
+        function getRelationshipMultiplier(relationship) {
+            switch(relationship) {
+                case 'brother':
+                case 'sister': return 2.0;
+                case 'cousin': return 1.5;
+                case 'cousin in-law': return 1.3;
+                case 'friend': return 1.2;
+                case 'other-family': return 1.4;
+                default: return 0.8;
+            }
+        }
+        
+        function getCulturalFactor(culture) {
+            switch(culture) {
+                case 'persian': return 1.3;
+                case 'white': return 1.0;
+                default: return 1.1;
+            }
+        }
+        
+        function getClosenessAdjustment(closeness) {
+            switch(closeness) {
+                case 'speech': return 1.5;
+                case 'close': return 1.3;
+                case 'moderate': return 1.0;
+                default: return 0.7;
+            }
+        }
+    </script>
+</body>
+</html>
