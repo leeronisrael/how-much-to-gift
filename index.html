@@ -74,6 +74,17 @@
             align-items: center;
             margin-bottom: 10px;
         }
+        .emoji-explosion {
+            display: inline-block;
+            animation: explode 2s infinite;
+        }
+        @keyframes explode {
+            0% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.3) rotate(5deg); }
+            50% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.4) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
     </style>
 </head>
 <body>
@@ -189,8 +200,8 @@
                 explanation = 'It\'s white people law. Everyone gets pickle ball equipment. No exceptions. 🏓';
             }
             else if (relationship === 'cousin in-law' && culture === 'persian' && event === 'wedding') {
-                recommendation = 'I\'m a fat boi, nom nom nom 🌭🍔🌭🍔🌭🍔🌭🍔🌭🍔';
-                explanation = 'Persian wedding + cousin in-law = FEAST MODE ACTIVATED! 🎉';
+                recommendation = 'You\'re a fat boi, nom nom nom <span class="emoji-explosion">🌭🍔🌭🍔🌭🍔🌭🍔🌭🍔</span>';
+                explanation = '';
             }
             else {
                 // Regular calculation
@@ -216,7 +227,7 @@
                 }
             }
             
-            document.getElementById('recommendation').textContent = recommendation;
+            document.getElementById('recommendation').innerHTML = recommendation;
             document.getElementById('explanation').textContent = explanation;
             document.getElementById('result').style.display = 'block';
         });
